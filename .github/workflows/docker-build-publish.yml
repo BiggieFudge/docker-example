@@ -15,10 +15,20 @@ jobs:
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
         with:
-          version: 2
-          url: ${{ secrets.JF_URL }}
-          artifactory-docker-registry: idani.jfrog.io
-          access-token: ${{ secrets.JF_ACCESS_TOKEN }}
+          version: '2.48.0' # Use a specific semantic version to avoid errors
+
+      - name: Configure JFrog CLI
+        run: |
+          jf rt c add my-artifactory \
+            --url=${{ secrets.JF_URL }} \
+            --access-token=${{ secrets.JF_ACCESS_TOKEN }} \
+            --interactive=false
+
+      - name: Docker login to Artifactory
+        run: |
+          docker login idani.jfrog.io \
+            -u eytanr \
+            -p ${{ secrets.JF_ACCESS_TOKEN }}
 
       - name: Build and push Docker image with JFrog CLI
         # Use a single command to perform both the Docker build and push.
