@@ -36,4 +36,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.JF_URL }}/eytanr-docker/docker:latest, ${{ secrets.JF_URL }}/eytanr-docker/docker-example:${{ github.sha }}
+          tags: |
+            ${{ secrets.JF_URL }}/eytanr-docker/docker-example:latest
+            ${{ secrets.JF_URL }}/eytanr-docker/docker-example:${{ github.sha }}
