@@ -1,4 +1,4 @@
-name: Docker Build and Push to Artifactory
+name: Docker Build and Publish to Artifactory
 
 on:
   push:
