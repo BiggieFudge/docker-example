@@ -15,11 +15,11 @@ jobs:
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
         with:
-          version: '2.48.0' # Use a specific semantic version to avoid errors
+          version: '2.78.9' # Use a specific semantic version to avoid errors
 
       - name: Configure JFrog CLI
         run: |
-          jf rt c add my-artifactory \
+          jf c add my-artifactory \
             --url=${{ secrets.JF_URL }} \
             --access-token=${{ secrets.JF_ACCESS_TOKEN }} \
             --interactive=false
