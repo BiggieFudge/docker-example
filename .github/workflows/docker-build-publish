@@ -1,0 +1,32 @@
+name: Docker Build and Push to Artifactory
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v4
+        with:
+          version: 2
+          url: ${{ secrets.JF_URL }}
+          artifactory-docker-registry: idani.jfrog.io
+          access-token: ${{ secrets.JF_ACCESS_TOKEN }}
+
+      - name: Build and push Docker image with JFrog CLI
+        # Use a single command to perform both the Docker build and push.
+        # This command also automatically collects all build information.
+        run: |
+          docker build -t idani.jfrog.io/eytanr-docker/docker-example:${{ github.sha }} .
+          jf rt docker-push idani.jfrog.io/eytanr-docker/docker-example:${{ github.sha }} eytanr-docker --build-name=my-app-build --build-number=${{ github.run_number }}
+          
+      - name: Publish build info
+        # This is the crucial step that creates the "build" record in Artifactory.
+        run: jf rt build-publish my-app-build ${{ github.run_number }}
