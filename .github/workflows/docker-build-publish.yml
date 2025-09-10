@@ -40,3 +40,5 @@ jobs:
       - name: Publish build info
         # This is the crucial step that creates the "build" record in Artifactory.
         run: jf rt build-publish my-app-build ${{ github.run_number }} --project=etn
+      - name: Scan Build info
+        run: jf bs my-app-build ${{ github.run_number }} --project=etn
