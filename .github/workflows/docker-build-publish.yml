@@ -37,11 +37,11 @@ jobs:
         # This command also automatically collects all build information.
         run: |
           docker build -t idani.jfrog.io/eytanr-docker/docker-example:${{ github.sha }} .
-          jf docker scan idani.jfrog.io/eytanr-docker/docker-example:${{ github.sha }} --project=etn
+          jf docker scan idani.jfrog.io/eytanr-docker/docker-example:${{ github.sha }} --project=etn --watches=etn-test
           jf rt docker-push idani.jfrog.io/eytanr-docker/docker-example:${{ github.sha }} eytanr-docker --build-name=my-app-build --build-number=${{ github.run_number }} --project=etn
           
       - name: Publish build info
         # This is the crucial step that creates the "build" record in Artifactory.
-        run: jf rt build-publish my-app-build ${{ github.run_number }} --project=etn --watches=etn-test
+        run: jf rt build-publish my-app-build ${{ github.run_number }} --project=etn 
       - name: Scan Build info
         run: jf bs my-app-build ${{ github.run_number }} --project=etn
